@@ -1,0 +1,10 @@
+{
+    "name": "webtales/alambic-connector-mongodb",
+    "require": {
+        "php": ">=5.5.0",
+        "ext-mongo": "*"
+    },
+    "autoload": {
+        "psr-0": { "AlambicMongodbConnector": "src/" }
+    }
+}
