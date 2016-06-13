@@ -51,11 +51,13 @@ class Connector
                 $result[]=$item;
             }
         }
-        return $result;
+        $payload["response"]=$result;
+        return $payload;
     }
 
     public function execute($payload=[],$collection){
         //WIP
-        return [];
+        $payload["response"]=[];
+        return $payload;
     }
 }
