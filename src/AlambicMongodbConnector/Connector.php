@@ -10,6 +10,9 @@ class Connector
 {
     public function __invoke($payload=[])
     {
+        if (isset($payload["response"])) {
+            return $payload;
+        }
         $configs=isset($payload["configs"]) ? $payload["configs"] : [];
         $baseConfig=isset($payload["connectorBaseConfig"]) ? $payload["connectorBaseConfig"] : [];
         $db=!empty($configs["db"]) ? $baseConfig["db"] : null;
