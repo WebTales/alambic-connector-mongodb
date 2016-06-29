@@ -15,7 +15,7 @@ class Connector
         }
         $configs=isset($payload["configs"]) ? $payload["configs"] : [];
         $baseConfig=isset($payload["connectorBaseConfig"]) ? $payload["connectorBaseConfig"] : [];
-        $db=!empty($configs["db"]) ? $baseConfig["db"] : null;
+        $db=!empty($baseConfig["db"]) ? $baseConfig["db"] : null;
         if (!empty($configs["db"])){
             $db=$configs["db"];
         }
@@ -61,10 +61,11 @@ class Connector
 
     public function execute($payload=[],$collection){
         $methodName=isset($payload["methodName"]) ? $payload["methodName"] : null;
+        $args=isset($payload["args"]) ? $payload["args"] : [];
         if(empty($methodName)){
             throw new Exception('MongoDB connector requires a valid methodName for write ops');
         }
-        if(empty($args['id'])&&$methodName!='creation'){
+        if(empty($args['id'])&&$methodName!='create'){
             throw new Exception('MongoDB connector requires id for operations other than create');
         }
         $result=[];
@@ -73,7 +74,8 @@ class Connector
             unset($args['id']);
         }
         if($methodName=="create"){
-            $result=$collection->insert($args);
+            $collection->insert($args);
+            $result=$args;
             if(isset($result['_id'])){
                 $result['id'] = (string)$result['_id'];
                 unset($result['_id']);
@@ -90,6 +92,7 @@ class Connector
             }
         }
         $payload["response"]=$result;
+
         return $payload;
     }
 }
