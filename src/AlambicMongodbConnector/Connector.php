@@ -76,23 +76,22 @@ class Connector
         if($methodName=="create"){
             $collection->insert($args);
             $result=$args;
-            if(isset($result['_id'])){
-                $result['id'] = (string)$result['_id'];
-                unset($result['_id']);
-            }
         } elseif ($methodName == "delete") {
-            $this->$collection->remove($args);
+            $delResult=$collection->remove($args);
+            if(!isset($delResult["n"])||$delResult["n"]==0){
+                throw new Exception('Found no record to delete');
+            }
+            $result=$args;
         } elseif ($methodName == "update") {
             $id= $args['_id'];
             unset($args['_id']);
             $result=$collection->findAndModify(["_id"=>$id],$args,null,["new"=>true]);
-            if(isset($result['_id'])){
-                $result['id'] = (string)$result['_id'];
-                unset($result['_id']);
-            }
+        }
+        if(isset($result['_id'])){
+            $result['id'] = (string)$result['_id'];
+            unset($result['_id']);
         }
         $payload["response"]=$result;
-
         return $payload;
     }
 }
