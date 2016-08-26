@@ -46,7 +46,23 @@ class Connector
                 $result['id']=(string) $result['_id'];
             }
         } else {
+            $start = !empty($payload['pipelineParams']['start']) ? $payload['pipelineParams']['start'] : null;
+            $limit = !empty($payload['pipelineParams']['limit']) ? $payload['pipelineParams']['limit'] : null;
+            $sort=null;
+            if (!empty($payload['pipelineParams']['orderBy'])) {
+                $direction = !empty($payload['pipelineParams']['orderByDirection']) && ($payload['pipelineParams']['orderByDirection'] == -'desc') ? -1 : 1;
+                $sort=$payload['pipelineParams']['orderBy'];
+            }
             $cursor = $collection->find($args);
+            if($sort){
+                $cursor->sort([$sort=>$direction]);
+            }
+            if($start){
+                $cursor->skip($start);
+            }
+            if($limit){
+                $cursor->limit($limit);
+            }
             while ($cursor->hasNext()) {
                 $item=$cursor->getNext();
                 if(!empty($item['_id'])){
