@@ -50,7 +50,7 @@ class Connector
             $limit = !empty($payload['pipelineParams']['limit']) ? $payload['pipelineParams']['limit'] : null;
             $sort=null;
             if (!empty($payload['pipelineParams']['orderBy'])) {
-                $direction = !empty($payload['pipelineParams']['orderByDirection']) && ($payload['pipelineParams']['orderByDirection'] == -'desc') ? -1 : 1;
+                $direction = !empty($payload['pipelineParams']['orderByDirection']) && ($payload['pipelineParams']['orderByDirection'] == 'desc') ? -1 : 1;
                 $sort=$payload['pipelineParams']['orderBy'];
             }
             $cursor = $collection->find($args);
