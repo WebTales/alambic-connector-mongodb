@@ -4,7 +4,9 @@ namespace AlambicMongodbConnector;
 
 
 
-use \Exception;
+use Alambic\Exception\ConnectorArgs;
+use Alambic\Exception\ConnectorConfig;
+use Alambic\Exception\ConnectorUsage;
 
 class Connector
 {
@@ -20,10 +22,10 @@ class Connector
             $db=$configs["db"];
         }
         if (!$db){
-            throw new Exception('Insufficient configuration : db required');
+            throw new ConnectorConfig('Insufficient configuration : db required');
         }
         if (empty($configs["collection"])){
-            throw new Exception('Insufficient configuration : collection required');
+            throw new ConnectorConfig('Insufficient configuration : collection required');
         }
         $connectionOptions=!empty($baseConfig["connectionOptions"]) ? $baseConfig["connectionOptions"] : [];
         $client= !empty($baseConfig["connectionString"]) ? new \MongoClient($baseConfig["connectionString"]) : new \MongoClient();
@@ -79,10 +81,10 @@ class Connector
         $methodName=isset($payload["methodName"]) ? $payload["methodName"] : null;
         $args=isset($payload["args"]) ? $payload["args"] : [];
         if(empty($methodName)){
-            throw new Exception('MongoDB connector requires a valid methodName for write ops');
+            throw new ConnectorConfig('MongoDB connector requires a valid methodName for write ops');
         }
         if(empty($args['id'])&&$methodName!='create'){
-            throw new Exception('MongoDB connector requires id for operations other than create');
+            throw new ConnectorArgs('MongoDB connector requires id for operations other than create');
         }
         $result=[];
         if(!empty($args['id'])){
@@ -95,7 +97,7 @@ class Connector
         } elseif ($methodName == "delete") {
             $delResult=$collection->remove($args);
             if(!isset($delResult["n"])||$delResult["n"]==0){
-                throw new Exception('Found no record to delete');
+                throw new ConnectorUsage('Found no record to delete');
             }
             $result=$args;
         } elseif ($methodName == "update") {
