@@ -1,5 +1,12 @@
 {
     "name": "ampize/alambic-connector-mongodb",
+    "description": "Alambic MongoDB connector",
+	"keywords": ["alambic", "mongodb", "connector"],
+	"type": "library",
+	"license": "MIT",
+	"authors": [{
+		"name": "Ampize"
+	}],
     "require": {
         "php": ">=5.5.0",
         "ext-mongo": "*"
