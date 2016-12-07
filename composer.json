@@ -8,8 +8,7 @@
 		"name": "Ampize"
 	}],
     "require": {
-        "php": ">=5.5.0",
-        "ext-mongo": "*"
+        "php": ">=5.5.0"
     },
     "autoload": {
         "psr-0": { "AlambicMongodbConnector": "src/" }
